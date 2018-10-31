@@ -3,3 +3,6 @@
 
 # @TESTMODE : if True, assertions will test the functions.
 TESTMODE = True
+
+LEARNINGRATE = 0.5
+EPOCHS = 5
