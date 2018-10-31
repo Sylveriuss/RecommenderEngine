@@ -636,6 +636,8 @@ if env.TESTMODE:
     assert round(normdf[0,1] * 100) == round(0.89442719 * 100)
     
     
+    
+    
 # @cosineDistance : To compute the cosine distance between the rows of a Numpy.Array
 #--------
 # df_ : a  Numpy.Array, the rows are the instances
