@@ -17,9 +17,10 @@ import sys
 # testTargetFile : path to the file that has the right ratings, for the couple mentionned in the testFile (string)
 # featureTypes : list of parametres configuration to be used from Movie Metadata Matrix (list of strings)
 # ratingTypes : list of rating's prediction computation to be done (list of strings)
+# Log : to display the logs
 # @return : (void) && print the dict containing the rmse for each configurations.
 #--------
-def Evaluate(trainFile, testFile, testTargetFile, featureTypes = ["INTERMEDIATE"], ratingTypes = ["DOTPRODUCT", "COSINE", "BRAYCURTIS"]):
+def Evaluate(trainFile, testFile, testTargetFile, featureTypes = ["INTERMEDIATE"], ratingTypes = ["DOTPRODUCT", "COSINE", "BRAYCURTIS"], Log = False):
     
     res = {}
     
@@ -29,7 +30,7 @@ def Evaluate(trainFile, testFile, testTargetFile, featureTypes = ["INTERMEDIATE"
             
             resultFile = featureType+"_"+ratingType+"_Evaluate.csv"
             
-            LRPredictor.EngineRunnerLRPred([trainFile, testFile, resultFile], featureType, ratingType, False)
+            LRPredictor.EngineRunnerLRPred([trainFile, testFile, resultFile], featureType, ratingType, Log)
             res[featureType+"_"+ratingType] = rtools.RMSEeval(testTargetFile, resultFile)            
             
     print("Result (rmse) :")
@@ -44,36 +45,38 @@ def Evaluate(trainFile, testFile, testTargetFile, featureTypes = ["INTERMEDIATE"
 # resultFile : path to file that will contain the output
 # featureTypes : list of parametres configuration to be used from Movie Metadata Matrix (list of strings)
 # ratingTypes : list of rating's prediction computation to be done (list of strings)
+# Log : to display the logs
 # @return : (void) The output will generated in a file (resultFile)
 #--------
-def RunPredictor(trainFile, testFile, resultFile, featureType = "INTERMEDIATE", ratingType = "DOTPRODUCT"):
+def RunPredictor(trainFile, testFile, resultFile, featureType = "INTERMEDIATE", ratingType = "DOTPRODUCT", Log = False):
     
     if resultFile == "":
         resultFile = featureType+"_"+ratingType+"_Run.csv"
     
-    LRPredictor.EngineRunnerLRPred([trainFile, testFile, resultFile], featureType, ratingType, False)
+    LRPredictor.EngineRunnerLRPred([trainFile, testFile, resultFile], featureType, ratingType, Log)
     
     print("The Run has Finished. The output is in the file : "+resultFile+".")
 
 
 #--------
-# Main Function
+# Main Function : Arguments [0 : output file] [1 : directory of the input files] [2 : -v If Logs wanted]
 #--------
 def Main():
     
     # Arguments
-    if len(sys.argv) < 2:
-        print("Need arguments : > Main.py [InputDatasDirectory with /] [PathOutputFile] ")
+    if len(sys.argv) == 1:
+        print("Need arguments : > Main.py [PathOutputFile] [InputDatasDirectory with /] [-v (optional)]")
         return
     
-    dataDirectory = sys.argv[0]
-    outputFile = sys.argv[1]
+    outputFile = sys.argv[1]       
+    dataDirectory = sys.argv[2] if len(sys.argv) > 2 else ""
+    log = True if "-v" in sys.argv else False
     
     # Process the MetaData of the movies
-    movieMdat.MovieMetadataProcessor(dataDirectory+'movies_metadata.csv')
+    movieMdat.MovieMetadataProcessor(dataDirectory+'movies_metadata.csv', "", log)
     
     # The prediction Algorithm
-    RunPredictor(dataDirectory+"ratings.csv", dataDirectory+"evaluation_ratings.csv", outputFile, "INTERMEDIATE", "DOTPRODUCT")
+    RunPredictor(dataDirectory+"ratings.csv", dataDirectory+"evaluation_ratings.csv", outputFile, "INTERMEDIATE", "DOTPRODUCT", log)
     
     # Clean the Data
     movieMdat.cleaner()

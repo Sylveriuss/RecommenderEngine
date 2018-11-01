@@ -18,6 +18,7 @@ import os
 #-------
 # FileArg : path to the metadata_movie CSV File. (string)
 # OutpurDir : path to the directory for the output files with / at the end. (string)
+# Log : to display the logs
 # @return :
 #       - Create a movieDF.dat file : the numpy array that has been processed. 
 #       - Create a movieIndex.dat file : the index of the rows of movieDF (movie_id as integers)
@@ -30,7 +31,7 @@ import os
 #
 #
 #
-def MovieMetadataProcessor(FileArg, OutpurDir = ""):
+def MovieMetadataProcessor(FileArg, OutpurDir = "", Log = False):
         
     if FileArg != "":
         metadataFile = FileArg
@@ -38,16 +39,19 @@ def MovieMetadataProcessor(FileArg, OutpurDir = ""):
         print("Should indicate the path to the movie metadata file.")
         return
     
-    print("--------------------------------")
-    print("Reading Movie's Metadata")
-    print("--------------------------------")
+    if Log:
+        print("--------------------------------")
+        print("Reading Movie's Metadata")
+        print("--------------------------------")
     
     # Reading Csv in list a
     a = rtools.readcsv(metadataFile)    
     
-    print("--------------------------------")
-    print("Cleaning MovieData")
-    print("--------------------------------")
+    
+    if Log:
+        print("--------------------------------")
+        print("Cleaning MovieData")
+        print("--------------------------------")
     
     # Dict that will contain the values of the selected parameters.    
     instances = {
@@ -67,14 +71,15 @@ def MovieMetadataProcessor(FileArg, OutpurDir = ""):
     genresLookUp = {}
     languagesLookUp = {}
     
-    print("Getting Data ...")
     start = time.time()
     
     # Getting the data from list to the dict
     rtools.getData(a, instances, collectionLookUp, genresLookUp, languagesLookUp)
     
     end = time.time()
-    print( "getData() execution time : " + str(end - start))
+    
+    if Log:
+        print( "getData() execution time : " + str(end - start))
     
     # Cleaning ... 
     rtools.free(a)
@@ -86,7 +91,9 @@ def MovieMetadataProcessor(FileArg, OutpurDir = ""):
     assert rtools.verifyNbInstancesAlign(instances)
     
     nbinstances = len(instances['movie_id'])
-    print("Nomber of movie instances : " + str(nbinstances))
+    
+    if Log:
+        print("Nomber of movie instances : " + str(nbinstances))
     
     # Parameter 'Popularity' : 
     #   Since some values were 'too high' -> replacement of those greater the 99.95 percentile by the mean.
@@ -199,9 +206,10 @@ def MovieMetadataProcessor(FileArg, OutpurDir = ""):
     
     df.set_index('movie_id', inplace=True)
     
-    print("----------------------------------")
-    print("Registering the Data as .dat files")
-    print("----------------------------------")
+    if Log:
+        print("----------------------------------")
+        print("Registering the Data as .dat files")
+        print("----------------------------------")
         
     # Registering the Indexes of the Data Frame as Integer values (.dat) for futher use
     dfIndex = df.index
