@@ -65,4 +65,4 @@ In a shell, run Main.py with the arguments as following :
 
 ### Warning:
 
-Computation might take some time since the work on parallelization have not been done.
+Computation might take some time since work on parallelization have not been done.
