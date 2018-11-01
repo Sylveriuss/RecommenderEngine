@@ -1,10 +1,10 @@
-Recommender Engine
+# Recommender Engine
 By Surya Sylverius
 ------------------
 
 
 
-# Goal:
+### Goal:
 
 The purpose of this project is to build a Recommender system that will predict user's movies ratings.
 We have the knowledge of previous ratings and the movies' metadata.
@@ -12,7 +12,7 @@ We have the knowledge of previous ratings and the movies' metadata.
 
 
 
-# Approach:
+### Approach:
 
 This is a content-based recommendation system. 
 We study the content of each movie. The metadata of the movies provide a vector of features like the 'release date', the 'genre'.
@@ -31,7 +31,7 @@ The best result have been from the linear regression gradient descent method.
 
 
 
-# Data:
+### Data:
 
 - movies_metadata.csv : Contain the metadata of movies
 
@@ -48,14 +48,14 @@ The best result have been from the linear regression gradient descent method.
 
 
 
-# Environnement:
+### Environnement:
 
 The code is in python. Some librairies have been used : Numpy, Scipy, Scikit-learn, Pandas
 
 
 	
 
-# Run:
+### Run:
 
 This files contain my work to find to best solution. 
 To run the application to make prediction for the evaluation_ratings file, the Main.py file has the principal function.
@@ -69,6 +69,6 @@ In a terminal console, run Main.py with the arguments as following :
 - Log : write -v if you want logs.
 
 
-# Warning:
+### Warning:
 
 Computation might take some time since the work on parallelization have not been done.
