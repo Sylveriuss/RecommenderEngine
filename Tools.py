@@ -736,14 +736,17 @@ def RMSEeval(targetFile, predictionsFile):
     t_userIndex = t[0].index("userId")
     
     p = readcsv(predictionsFile)
-    p_ratingIndex = p[0].index("ratings")
-    p_movieIndex = p[0].index("movie_id")
-    p_userIndex = p[0].index("user_id")
+    p_ratingIndex = p[0].index("rating")
+    p_movieIndex = p[0].index("movieId")
+    p_userIndex = p[0].index("userId")
     
     targets = {}
     
     # Getting all the target values for the couple (user_id, movie_id)
     for t_elem in t[1:]:
+        
+        if "rating" in t_elem:
+            continue
         
         targets[str(t_elem[t_userIndex])+"_"+str(t_elem[t_movieIndex])] = float(t_elem[t_ratingIndex])
     
@@ -751,9 +754,9 @@ def RMSEeval(targetFile, predictionsFile):
     denom = 0
     
     for p_elem in p[1:]:
-        
+                
         # Skipping lines that have no rating
-        if p_elem[p_ratingIndex] == "":
+        if p_elem[p_ratingIndex] == "" or "rating" in p_elem:
             continue
         
         keyUserMovie = str(p_elem[p_userIndex])+"_"+str(p_elem[p_movieIndex]) 

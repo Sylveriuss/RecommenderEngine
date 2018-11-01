@@ -2,8 +2,12 @@
 
 import Tools as rtools
 import LRPredictor
+import MovieMetadataReader as movieMdat
    
-        
+import sys
+
+    
+    
 #--------
 # To Run the Algorithm on differents configurations of Data and differents ways of predictions
 # To Evaluate the results with the RMSE metric
@@ -28,7 +32,8 @@ def Evaluate(trainFile, testFile, testTargetFile, featureTypes = ["INTERMEDIATE"
             LRPredictor.EngineRunnerLRPred([trainFile, testFile, resultFile], featureType, ratingType, False)
             res[featureType+"_"+ratingType] = rtools.RMSEeval(testTargetFile, resultFile)            
             
-    print("Result (rmse) :" + res)
+    print("Result (rmse) :")
+    print(res)
         
 
 #--------
@@ -50,11 +55,27 @@ def RunPredictor(trainFile, testFile, resultFile, featureType = "INTERMEDIATE", 
     
     print("The Run has Finished. The output is in the file : "+resultFile+".")
 
-#trainFile = "ratings.csv"
-#evalFile = "evaluation_ratings.csv" 
 
-#Evaluate("ratings.csv", "evaluation_ratings.csv", ["INTERMEDIATE"], ["DOTPRODUCT"])
-#Evaluate("SplitFile1.csv", "evalSplitFile.csv", ["INTERMEDIATE"], ["DOTPRODUCT"])
+#--------
+# Main Function
+#--------
+def Main():
+    
+    # Arguments
+    if len(sys.argv) < 2:
+        print("Need arguments : > Main.py [InputDatasDirectory with /] [PathOutputFile] ")
+        return
+    
+    dataDirectory = sys.argv[0]
+    outputFile = sys.argv[1]
+    
+    # Process the MetaData of the movies
+    movieMdat.MovieMetadataProcessor(dataDirectory+'movies_metadata.csv')
+    
+    # The prediction Algorithm
+    RunPredictor(dataDirectory+"ratings.csv", dataDirectory+"evaluation_ratings.csv", outputFile, "INTERMEDIATE", "DOTPRODUCT")
+    
+    # Clean the Data
+    movieMdat.cleaner()
 
-RunPredictor("ratings.csv", "evaluation_ratings.csv", "predicted_ratings.csv", "INTERMEDIATE", "DOTPRODUCT")
-
+Main()

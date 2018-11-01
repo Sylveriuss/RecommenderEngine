@@ -10,6 +10,7 @@ import csv
 import pandas as pd
 import numpy as np
 import time
+import os
 
 
 """ @MovieMetadataProcessor:  Main Function that process the data """
@@ -252,6 +253,13 @@ def MovieMetadataRetriever(neededColumns):
     dfTF = dfTF[:, dfColumns]
     
     return dfTF, dfIndex
+
+# @cleaner : Remove create dat files
+#---------
+def cleaner():
+    os.remove(env.MMDT_ROWINDEX)
+    os.remove(env.MMDT_DATAFRAME)
+    os.remove(env.MMDT_COLUMNS)
     
 #MovieMetadataProcessor('movies_metadata.csv')
 #MovieMetadataRetriever(["genre", "releaseDate"])

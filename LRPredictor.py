@@ -193,7 +193,7 @@ def EngineRunnerLRPred(FileArgs, FeaturesType = "BASIC", RatingType = "DOTPRODUC
     
     # Opening the outputFile to write the output
     ofile = open(outputFile, "w", encoding="utf8")
-    ofile.write("user_id,movie_id,ratings\n")
+    ofile.write("userId,movieId,rating\n")
     
     for row in reader:
         
