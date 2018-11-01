@@ -2,10 +2,14 @@ Recommender Engine
 By Surya Sylverius
 ------------------
 
+
+
 Goal:
 
 The purpose of this project is to build a Recommender system that will predict user's movies ratings.
 We have the knowledge of previous ratings and the movies' metadata.
+
+
 
 
 Approach:
@@ -25,16 +29,23 @@ My first approach was to build TF-IDF model and use it to predict ratings. (see 
 The best result have been from the linear regression gradient descent method.
 
 
+
+
 Data:
 
-movies_metadata.csv : 
-	adult,belongs_to_collection,budget,genres,homepage,id,imdb_id,original_language,original_title,overview,popularity,poster_path,production_companies,production_countries,release_date,revenue,runtime,spoken_languages,status,tagline,title,video,vote_average,vote_count
+- movies_metadata.csv : Contain the metadata of movies
 
-ratings.csv :
-	user_id,movie_id,rating,timestamp
+@columns : adult,belongs_to_collection,budget,genres,homepage,id,imdb_id,original_language,original_title,overview,popularity,poster_path,production_companies,production_countries,release_date,revenue,runtime,spoken_languages,status,tagline,title,video,vote_average,vote_count
+
+- ratings.csv : Movie's ratings by users
+
+@columns : user_id,movie_id,rating,timestamp
 	
-evaluation_ratings.csv:
-	user_id,movie_id
+- evaluation_ratings.csv : Couple of User and Movie, whose ratings should be predicted
+
+@columns : user_id,movie_id
+
+
 
 
 Environnement:
@@ -43,6 +54,7 @@ The code is in python. Some librairies have been used : Numpy, Scipy, Scikit-lea
 
 
 	
+
 Run:
 
 This files contain my work to find to best solution. 
