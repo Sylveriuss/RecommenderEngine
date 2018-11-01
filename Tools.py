@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Tools contains many of the functions needed to process the movies_metadata.csv file.
-# It has been specifically made for this purpose.
+# Tools contains many of the functions needed to process the movies_metadata.csv file, the evaluation_ratings.csv file.
+# And other functions ...like to normalize, to compute the cosine distance.
 #
 
 import csv
@@ -651,4 +651,120 @@ if env.TESTMODE:
     distdf = cosineDistance(mydf)
     assert round(distdf[0,0] * 100) == 0
     assert round(distdf[0,1] * 1000) == round(0.01613009 * 1000)
+
+
+
+
+# @readCsvEvaluationData : To read the evaluation_ratings.csv and get the data
+#--------
+# evalFile: path to the evaluation_ratings.csv file (string)
+# log: to diplay the logs (boolean)
+# @return : a Dict that have for key the user_id (int) and for value the list of movie_id (list of strings).
+#           (movie_id that should be rated for this user.)
+#--------
+def readCsvEvaluationData(evalFile, log = False):
+    
+    evalutionByUser = {}
+    
+    ifile = open(evalFile, "r", encoding="utf8")
+    reader = csv.reader(open(evalFile, "r", encoding="utf8"), delimiter=",")
+    
+    rownum = 0
+    errornum = 0
+    
+    for row in reader:
+        
+        try:
+                        
+            if len(row) < 2:
+                errornum += 1
+                continue
+            
+            # to skip the Header
+            if row[0] == 'userId':
+                continue
+            
+            
+            if rownum % 500000 == 0 and log:
+                print("Reading file "+ evalFile +" : line count ... "+ str(rownum))
+        
+            # user_id 
+            user_id = (int(row[0]))
+            
+            # movie_id
+            movie_id = (row[1])        
+            
+            # Adding the new value to the output dict
+            if user_id in evalutionByUser:
+                evalutionByUser[user_id].append(movie_id)
+            else:
+                evalutionByUser[user_id] = [movie_id]
+            
+            rownum += 1
+            
+        except:
+            
+            # Skipped Rows
+            errornum += 1
+            pass
+    
+    ifile.close()
+    
+    if log:
+        print("Finish reading file "+ evalFile +" : number of lines : "+ str(rownum))
+        print('Number of skipped lines : ' + str(errornum))
+    
+    return evalutionByUser
+
+
+
+
+# @RMSEeval: To calculate the accuracy of the prediction from files
+#--------
+# targetFile : path to the file that have the right ratings, the targets (string)
+#              The columns in the header are : userId, movieId, rating
+# predictionsFile : path to the file that have predictions of the ratings (string)
+#              The columns in the header are : user_id, movie_id, ratings
+#--------
+def RMSEeval(targetFile, predictionsFile):
+    
+    # Reading Files and Retrieve the column index according to the Headers
+    
+    t = readcsv(targetFile)
+    t_ratingIndex = t[0].index("rating")
+    t_movieIndex = t[0].index("movieId")
+    t_userIndex = t[0].index("userId")
+    
+    p = readcsv(predictionsFile)
+    p_ratingIndex = p[0].index("ratings")
+    p_movieIndex = p[0].index("movie_id")
+    p_userIndex = p[0].index("user_id")
+    
+    targets = {}
+    
+    # Getting all the target values for the couple (user_id, movie_id)
+    for t_elem in t[1:]:
+        
+        targets[str(t_elem[t_userIndex])+"_"+str(t_elem[t_movieIndex])] = float(t_elem[t_ratingIndex])
+    
+    somme = 0
+    denom = 0
+    
+    for p_elem in p[1:]:
+        
+        # Skipping lines that have no rating
+        if p_elem[p_ratingIndex] == "":
+            continue
+        
+        keyUserMovie = str(p_elem[p_userIndex])+"_"+str(p_elem[p_movieIndex]) 
+        
+        # Computing the values the RMSE metric 
+        if keyUserMovie in targets:
+            somme += ( float(p_elem[p_ratingIndex]) - targets[keyUserMovie] )**2
+            denom += 1
+            
+    if denom == 0:
+        return 0
+    
+    return np.sqrt(somme/denom)
 

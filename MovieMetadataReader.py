@@ -5,13 +5,14 @@
 #
 
 import Tools as rtools
+import env
 import csv
 import pandas as pd
 import numpy as np
 import time
 
 
-""" @MovieReader:  Main Function in a script mode """
+""" @MovieMetadataProcessor:  Main Function that process the data """
 # This function process the parameters of the metadatas of movies.
 #-------
 # FileArg : path to the metadata_movie CSV File. (string)
@@ -28,7 +29,7 @@ import time
 #
 #
 #
-def MovieReader(FileArg, OutpurDir = ""):
+def MovieMetadataProcessor(FileArg, OutpurDir = ""):
         
     if FileArg != "":
         metadataFile = FileArg
@@ -157,7 +158,7 @@ def MovieReader(FileArg, OutpurDir = ""):
     columnsDF = ['movie_id'] + rtools.formingColumnsDF(continuousData, categoricalData)
     
     # Writing the columns (without the movie_id column)
-    with open(OutpurDir+"moviesColumns.csv", "w") as output:
+    with open(OutpurDir + env.MMDT_COLUMNS, "w") as output:
         writer = csv.writer(output, lineterminator='\n')
         for val in columnsDF[1:]:
             writer.writerow([val])
@@ -201,15 +202,56 @@ def MovieReader(FileArg, OutpurDir = ""):
     print("Registering the Data as .dat files")
     print("----------------------------------")
         
-    # Registering the Index of the Data Frame as Integer values (.dat) for futher use
+    # Registering the Indexes of the Data Frame as Integer values (.dat) for futher use
     dfIndex = df.index
     dfIndexAsInt = [int(elem) for elem in dfIndex]
-    indexMemmap = np.memmap(OutpurDir+"movieIndex.dat", dtype='int64', mode='w+', shape=dfIndex.shape)
+    indexMemmap = np.memmap(OutpurDir + env.MMDT_ROWINDEX, dtype='int64', mode='w+', shape=dfIndex.shape)
     indexMemmap[:] = dfIndexAsInt[:]
 
     # Registering the Data Frame as Numpy.Array .dat
     dfTF = df.values    
-    dfMemmap = np.memmap(OutpurDir+"movieDF.dat", dtype='float32', mode='w+', shape=dfTF.shape)
+    dfMemmap = np.memmap(OutpurDir + env.MMDT_DATAFRAME, dtype='float32', mode='w+', shape=dfTF.shape)
     dfMemmap[:] = dfTF[:]
     
-#MovieReader('movies_metadata.csv')
+    
+    
+    
+""" MovieMetadataRetriever : Function to get the data from the registered files """
+#
+# neededColumns: list of string indicating the columns (parameters) of the data that will be kept.
+#                example: ["genre", "releaseDate", "popularity", "voteAverage"]
+#------
+# It will return the data as a numpy.array and the rowIndex as a list of strings
+# @return: dfTF (numpy.array), dfIndex (list of strings)
+#------
+def MovieMetadataRetriever(neededColumns):    
+    
+    # Getting the Indexes of the rows 'Movie_id'
+    dfTFIndex = np.memmap(env.MMDT_ROWINDEX, dtype='int64', mode='r')
+    dfIndex = [str(elem) for elem in dfTFIndex]
+    
+    # Getting the Data as Numpy.Array
+    dfTF = np.memmap(env.MMDT_DATAFRAME, dtype='float32', mode='r')
+    
+    # Reshaping as matrix ( Num_Movie_ids x Num_Parameters )
+    dfTF = dfTF.reshape((len(dfTFIndex), int(len(dfTF)/len(dfTFIndex))))
+    
+    # Getting the Columns of the data matrix
+    dfColumns = []
+    with open(env.MMDT_COLUMNS, "r") as inputColumns:        
+        index = 0        
+        for val in inputColumns:
+            
+            # keeping only the selected columns from the input neededColumns
+            if val.split('_')[0] in neededColumns:
+                dfColumns += [index]
+                
+            index += 1
+    
+    # From the Data matrix, getting only the wanted columns    
+    dfTF = dfTF[:, dfColumns]
+    
+    return dfTF, dfIndex
+    
+#MovieMetadataProcessor('movies_metadata.csv')
+#MovieMetadataRetriever(["genre", "releaseDate"])
