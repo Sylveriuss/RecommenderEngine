@@ -1,5 +1,4 @@
-# Recommender Engine
-By Surya Sylverius
+# Recommender Engine By Surya Sylverius
 ------------------
 
 
@@ -35,15 +34,9 @@ The best result have been from the linear regression gradient descent method.
 
 - movies_metadata.csv : Contain the metadata of movies
 
-@columns : adult,belongs_to_collection,budget,genres,homepage,id,imdb_id,original_language,original_title,overview,popularity,poster_path,production_companies,production_countries,release_date,revenue,runtime,spoken_languages,status,tagline,title,video,vote_average,vote_count
-
 - ratings.csv : Movie's ratings by users
 
-@columns : user_id,movie_id,rating,timestamp
-	
 - evaluation_ratings.csv : Couple of User and Movie, whose ratings should be predicted
-
-@columns : user_id,movie_id
 
 
 
@@ -62,7 +55,9 @@ To run the application to make prediction for the evaluation_ratings file, the M
 
 In a terminal console, run Main.py with the arguments as following :
 
-> python Main.py [$OutputFilePath] [$DirectoryOfInputDataFiles] [(optional)-v]
+```shell
+ python Main.py [$OutputFilePath] [$DirectoryOfInputDataFiles] [(optional)-v]
+```
 
 - OutputFilePath : a string
 - DirectoryOfInputDataFiles : a string. If it is the current directory, put ./
