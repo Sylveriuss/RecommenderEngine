@@ -53,10 +53,10 @@ The code is in python. Some librairies have been used : Numpy, Scipy, Scikit-lea
 This files contain my work to find to best solution. 
 To run the application to make prediction for the evaluation_ratings file, the Main.py file has the principal function.
 
-In a terminal console, run Main.py with the arguments as following :
+In a shell, run Main.py with the arguments as following :
 
 ```shell
- python Main.py [$OutputFilePath] [$DirectoryOfInputDataFiles] [(optional)-v]
+> python Main.py [$OutputFilePath] [$DirectoryOfInputDataFiles] [(optional)-v]
 ```
 
 - OutputFilePath : a string
