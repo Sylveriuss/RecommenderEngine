@@ -3,6 +3,7 @@
 import Tools as rtools
 import LRPredictor
 import MovieMetadataReader as movieMdat
+import env
    
 import sys
 
@@ -73,10 +74,10 @@ def Main():
     log = True if "-v" in sys.argv else False
     
     # Process the MetaData of the movies
-    movieMdat.MovieMetadataProcessor(dataDirectory+'movies_metadata.csv', "", log)
+    movieMdat.MovieMetadataProcessor(dataDirectory+env.IN_MOVIES_METADATA, "", log)
     
     # The prediction Algorithm
-    RunPredictor(dataDirectory+"ratings.csv", dataDirectory+"evaluation_ratings.csv", outputFile, "INTERMEDIATE", "DOTPRODUCT", log)
+    RunPredictor(dataDirectory+env.IN_RATINGS, dataDirectory+env.IN_EVALUATION_RATINGS, outputFile, env.FEATURE_TYPE, env.RATING_TYPE, log)
     
     # Clean the Data
     movieMdat.cleaner()
