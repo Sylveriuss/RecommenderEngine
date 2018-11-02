@@ -1,4 +1,6 @@
-# Recommender Engine By Surya Sylverius
+# Recommender Engine
+
+## Content Based Recommendation System to predict movies' ratings
 
 
 
