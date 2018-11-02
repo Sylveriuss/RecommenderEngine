@@ -53,8 +53,8 @@ The files :
 - Tools.py : Directory of functions needed for this implementation
 
 Other :
-- MovieDistanceComputer : For the generated .dat file, from movies' metadata processing, to compute the distance matrix between the movies (with the cosine distance). The application takes an important amount of time.
-- tfIdf_example : It contains the functions to compute the TF-IDF algorithm. We can use them on Pandas DataFrame.
+- MovieDistanceComputer.py : For the generated .dat file, from movies' metadata processing, to compute the distance matrix between the movies (with the cosine distance). The application takes an important amount of time.
+- tfIdf_example.py : It contains the functions to compute the TF-IDF algorithm. We can use them on Pandas DataFrame.
 
 
 
