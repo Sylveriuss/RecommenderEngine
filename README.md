@@ -42,7 +42,8 @@ The best result have been from the linear regression gradient descent method.
 
 ### Environnement:
 
-The code is in python. Some librairies have been used : Numpy, Scipy, Scikit-learn, Pandas
+The code is in python. Some librairies have been used : Numpy, Scipy, Scikit-learn, Pandas.
+
 The files : 
 - Env.py : Some global variables that are shared among those files.
 - Main.py : Has the main function Main() that we will read all input files, train and predict. It also has a function Evaluate() to train, predict and validate on a test data with the RMSE metric.
@@ -50,6 +51,7 @@ The files :
 - MovieMetadataReadear.py : To read the movie metadata file and process it. The output is saved  in a .dat file, to avoid doing it repeatedly. It provides functions to retrieve data from those .dat files and to clean them.
 - LinearRegressionGradientDescent.py : It has the training function that is will compute the gradient descent.
 - Tools.py : Directory of functions needed for this implementation
+
 Other :
 - MovieDistanceComputer : For the generated .dat file, from movies' metadata processing, to compute the distance matrix between the movies (with the cosine distance). The application takes an important amount of time.
 - tfIdf_example : It contains the functions to compute the TF-IDF algorithm. We can use them on Pandas DataFrame.
